@@ -1,16 +1,13 @@
 {% include "header.html" %}
 
 <!-- Page Header-->
-<header
-  class="masthead"
-  style="background-image: url('../static/assets/img/home-bg.jpg')"
->
+<header class="masthead" style="background-image: url('../static/assets/img/home-bg.jpg')">
   <div class="container position-relative px-4 px-lg-5">
     <div class="row gx-4 gx-lg-5 justify-content-center">
       <div class="col-md-10 col-lg-8 col-xl-7">
         <div class="site-heading">
-          <h1>Angela's Blog</h1>
-          <span class="subheading">A collection of random musings.</span>
+          <h1>SAM5io Blogs</h1>
+          <span class="subheading">My mind. My expressions. My death.</span>
         </div>
       </div>
     </div>
@@ -46,11 +43,7 @@
       <!-- Only show Create Post button if user id is 1 (admin user) -->
       {% if current_user.id == 1: %}
       <div class="d-flex justify-content-end mb-4">
-        <a
-          class="btn btn-primary float-right"
-          href="{{url_for('add_new_post')}}"
-          >Create New Post</a
-        >
+        <a class="btn btn-primary float-right" href="{{url_for('add_new_post')}}">Create New Post</a>
       </div>
       {% endif %}
 
