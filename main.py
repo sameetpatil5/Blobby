@@ -11,7 +11,7 @@ from sqlalchemy.orm import relationship, DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import Integer, String, Text
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
-from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
+from forms import BlogPostForm, RegisterForm, LoginForm, CommentForm
 import smtplib
 
 load_dotenv()
@@ -217,7 +217,7 @@ def show_post(post_id):
 @app.route("/new-post", methods=["GET", "POST"])
 @admin_only
 def add_new_post():
-    form = CreatePostForm()
+    form = BlogPostForm()
     if form.validate_on_submit():
         new_post = BlogPost(
             title=form.title.data,
@@ -237,7 +237,7 @@ def add_new_post():
 @app.route("/edit-post/<int:post_id>", methods=["GET", "POST"])
 def edit_post(post_id):
     post = db.get_or_404(BlogPost, post_id)
-    edit_form = CreatePostForm(
+    edit_form = BlogPostForm(
         title=post.title,
         subtitle=post.subtitle,
         img_url=post.img_url,
