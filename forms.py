@@ -1,7 +1,14 @@
 # forms.py - This file contains various WTForms used in the application.
 
 from flask_wtf import FlaskForm
-from wtforms import EmailField, StringField, SubmitField, PasswordField, URLField
+from wtforms import (
+    EmailField,
+    StringField,
+    SubmitField,
+    PasswordField,
+    TextAreaField,
+    URLField,
+)
 from wtforms.validators import DataRequired, URL, Email
 from flask_ckeditor import CKEditorField
 
@@ -66,7 +73,7 @@ class CommentForm(FlaskForm):
     - submit: A submit field for submitting the form.
     """
 
-    comment_text = CKEditorField("Comment", validators=[DataRequired()])
+    comment_text = TextAreaField("Comment", validators=[DataRequired()])
     submit = SubmitField("Submit Comment")
 
 
