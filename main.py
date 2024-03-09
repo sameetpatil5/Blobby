@@ -127,7 +127,7 @@ def context_processor():
     return dict(
         logged_in=session.get("logged_in", False),
         is_admin=session.get("is_admin", False),
-        user_email=session.get("user_email", ""),
+        # user_email=session.get("user_email", None),
         current_user=current_user,
     )
 
@@ -219,7 +219,7 @@ def logout():
     logout_user()
     session["is_admin"] = False
     session["logged_in"] = False
-    session["user_email"] = ""
+    session["user_email"] = None
     return redirect(url_for("get_all_posts"))
 
 
@@ -235,7 +235,7 @@ def get_all_posts():
 @app.route("/post/<int:post_id>", methods=["GET", "POST"])
 def show_post(post_id):
     requested_post = db.get_or_404(BlogPost, post_id)
-    comment_form = CommentForm()
+    comment_form = CommentForm(comment_text=" ")
     if comment_form.validate_on_submit():
         if current_user.is_authenticated:
             new_comment = Comment(
@@ -319,8 +319,8 @@ def about():
 @app.route("/contact", methods=["GET", "POST"])
 def contact():
     if request.method == "POST":
-        MESSAGE = f"Subject: {request.form['name']} has sent a messsage!!!\n\n \
-                    Name: {request.form['name']}\n \
+        MESSAGE = f"Subject: {request.form['username']} has sent a messsage!!!\n\n \
+                    Name: {request.form['username']}\n \
                     E-mail: {request.form['email']}\n \
                     Phone No.: {request.form['phone']}\n \
                     Message: {request.form['message']}"
@@ -334,7 +334,7 @@ def contact():
         return render_template("contact.html", msg_sent=True)
     else:
         if current_user.is_authenticated:
-            name = current_user.name
+            name = current_user.username
             email = current_user.email
         else:
             name = ""
@@ -350,4 +350,4 @@ def contact():
 
 # Run the app
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(debug=True)

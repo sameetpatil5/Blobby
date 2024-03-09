@@ -43,9 +43,9 @@ class RegisterForm(FlaskForm):
     - submit: A submit field for submitting the form.
     """
 
-    email = EmailField("Email", validators=[DataRequired(), Email()])
+    email = EmailField("Email", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])
-    name = StringField("Name", validators=[DataRequired()])
+    username = StringField("Name", validators=[DataRequired()])
     submit = SubmitField("Register")
 
 
@@ -59,7 +59,7 @@ class LoginForm(FlaskForm):
     - submit: A submit field for submitting the form.
     """
 
-    email = EmailField("Email", validators=[DataRequired(), Email()])
+    email = EmailField("Email", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])
     submit = SubmitField("Log In")
 
@@ -69,7 +69,7 @@ class CommentForm(FlaskForm):
     """
     CommentForm is used for users to add comments under a blog post.
     It contains the following fields:
-    - comment_text: A required CKEditor field for the user's comment.
+    - comment_text: A required TextArea field for the user's comment.
     - submit: A submit field for submitting the form.
     """
 
@@ -88,7 +88,7 @@ class ContactFrom(FlaskForm):
     - submit: A submit field for submitting the form.
     """
 
-    name = StringField("Name", validators=[DataRequired()])
-    email = EmailField("Email Address", validators=[DataRequired(), Email()])
+    username = StringField("Name", validators=[DataRequired()])
+    email = EmailField("Email Address", validators=[DataRequired()])
     message = StringField("Message", validators=[DataRequired()])
     submit = SubmitField("Send Message")
