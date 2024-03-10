@@ -235,7 +235,7 @@ def get_all_posts():
 @app.route("/post/<int:post_id>", methods=["GET", "POST"])
 def show_post(post_id):
     requested_post = db.get_or_404(BlogPost, post_id)
-    comment_form = CommentForm(comment_text=" ")
+    comment_form = CommentForm()
     if comment_form.validate_on_submit():
         if current_user.is_authenticated:
             new_comment = Comment(
@@ -245,9 +245,11 @@ def show_post(post_id):
             )
             db.session.add(new_comment)
             db.session.commit()
+            return redirect(url_for("show_post", post_id=requested_post.id))
         else:
             flash("You need to login or register to comment.")
             return redirect(url_for("login"))
+    comment_form.comment_text.data = ""
     return render_template(
         "post.html", post=requested_post, form=comment_form, current_user=current_user
     )
@@ -319,10 +321,9 @@ def about():
 @app.route("/contact", methods=["GET", "POST"])
 def contact():
     if request.method == "POST":
-        MESSAGE = f"Subject: {request.form['username']} has sent a messsage!!!\n\n \
-                    Name: {request.form['username']}\n \
+        MESSAGE = f"Subject: {request.form['name']} has sent a messsage!!!\n\n \
+                    Name: {request.form['name']}\n \
                     E-mail: {request.form['email']}\n \
-                    Phone No.: {request.form['phone']}\n \
                     Message: {request.form['message']}"
         with smtplib.SMTP("smtp.gmail.com") as connection:
             connection.starttls()
