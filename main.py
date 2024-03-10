@@ -301,11 +301,24 @@ def edit_post(post_id):
     )
 
 
+# Delete comments related to posts
+def delete_related_comments(post_id):
+    comments = (
+        db.session.execute(db.select(Comment).where(Comment.post_id == post_id))
+        .scalars()
+        .all()
+    )
+    for comment in comments:
+        db.session.delete(comment)
+    db.session.commit()
+
+
 # Delete post (admin only)
 @app.route("/delete/<int:post_id>")
 @admin_only
 def delete_post(post_id):
     post_to_delete = db.get_or_404(BlogPost, post_id)
+    delete_related_comments(post_id)
     db.session.delete(post_to_delete)
     db.session.commit()
     return redirect(url_for("get_all_posts"))
