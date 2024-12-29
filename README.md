@@ -56,12 +56,31 @@ Access the app at `http://127.0.0.1:5000/`.
 
 ```plaintext
 Blobby/
-├── main.py               # Application entry point
-├── requirements.txt      # Project dependencies
-├── forms.py              # WTForms for user input
-├── templates/            # HTML templates for the UI
-├── static/               # Static assets (CSS, JS, Images)
-└── Procfile              # Deployment configuration for Heroku
+├── app/                      # Main application folder
+│   ├── __init__.py           # Initializes the app package
+│   ├── forms.py              # Contains all forms
+│   ├── models.py             # Defines database models
+│   ├── routes.py             # Contains the routes (views) for the application
+├── static/                   # Static files
+│   ├── assets/               # Additional assets
+│   ├── css/                  # CSS files
+│   ├── js/                   # Javascript files
+├── templates/                # Jinja2 templates for rendering HTML pages
+│   ├── about.html            # About page
+│   ├── contact.html          # Contact page
+│   ├── footer.html           # Footer template
+│   ├── header.html           # Header template
+│   ├── index.html            # Homepage displaying all posts
+│   ├── login.html            # Login page
+│   ├── make-post.html        # Page for creating or editing posts
+│   ├── post.html             # Page for viewing individual posts
+│   └── register.html         # User registration page
+├── .gitignore                # Git ignore file
+├── config.py                 # Configuration file
+├── requirements.txt          # Python dependencies for the project
+├── run.py                    # Entry point to run the Flask app
+├── vercel.json               # Vercel configuration for deployment
+└── README.md                 # Project documentation
 ```
 
 ---
