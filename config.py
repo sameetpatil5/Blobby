@@ -2,13 +2,7 @@ import os
 
 class Config:
     SECRET_KEY = os.getenv("SECRET_KEY")
-    if not SECRET_KEY:
-        raise ValueError("No SECRET_KEY set for Flask application")
-    
-    SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI", "sqlite:///site.db")
-    if not SQLALCHEMY_DATABASE_URI:
-        raise ValueError("No SQLALCHEMY_DATABASE_URI set for Flask application")
-    
+    SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     MAIL_SERVER = "smtp.gmail.com"
     MAIL_PORT = 587
