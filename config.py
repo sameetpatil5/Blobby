@@ -5,17 +5,8 @@ class Config:
     SQLALCHEMY_DATABASE_URI = os.environ.get("SQLALCHEMY_DATABASE_URI")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     MAIL_SERVER = "smtp.gmail.com"
-    MAIL_PORT = 587
-    MAIL_USE_TLS = True
-    MAIL_USERNAME = os.environ.get("EMAIL")
+    MAIL_ADDRESS = os.environ.get("EMAIL")
     MAIL_PASSWORD = os.environ.get("PASSWORD")
-
-    # CKEDITOR_CONFIG = {
-    #     'versionCheck': False,
-    #     'height': 300,
-    #     'toolbar': 'Full',
-    #     'removePlugins': 'elementspath'
-    # }
 
     # Allowed tags and attributes for sanitization
     ALLOWED_TAGS = [

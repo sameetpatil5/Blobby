@@ -8,13 +8,7 @@ from app import db
 from flask import current_app
 from functools import wraps
 import smtplib
-import os
 import bleach
-import re
-
-# Load email credentials from environment variables
-MAIL_ADDRESS = os.environ.get("EMAIL")
-MAIL_APP_PW = os.environ.get("PASSWORD")
 
 # Sanitize content from User input
 def sanitize(text):
@@ -179,14 +173,29 @@ def about():
 # Contact page
 @routes_bp.route("/contact", methods=["GET", "POST"])
 def contact():
+    # Load the EMAIL and PASSWORD from app
+    MAIL_ADDRESS = current_app.config["MAIL_ADDRESS"]
+    MAIL_PASSWORD = current_app.config["MAIL_PASSWORD"]
+
     if request.method == "POST":
-        message = f"Subject: {request.form['name']} has sent a message!!!\n\n \
+        MESSAGE = f"Subject: {request.form['name']} has sent a messsage!!!\n\n \
                     Name: {request.form['name']}\n \
                     E-mail: {request.form['email']}\n \
                     Message: {request.form['message']}"
-        with smtplib.SMTP("smtp.gmail.com") as connection:
+        with smtplib.SMTP("smtp.gmail.com", 587) as connection:
             connection.starttls()
-            connection.login(MAIL_ADDRESS, MAIL_APP_PW)
-            connection.sendmail(MAIL_ADDRESS, MAIL_ADDRESS, message)
+            connection.login(user=MAIL_ADDRESS, password=MAIL_PASSWORD)
+            connection.sendmail(
+                from_addr=MAIL_ADDRESS, to_addrs=MAIL_ADDRESS, msg=MESSAGE
+            )
+            connection.close()
         return render_template("contact.html", msg_sent=True)
-    return render_template("contact.html", msg_sent=False)
+    else:
+        if current_user.is_authenticated:
+            name = current_user.username
+            email = current_user.email
+        else:
+            name = ""
+            email = ""
+        return render_template("contact.html", msg_sent=False, name=name, email=email, current_user=current_user,
+        )
