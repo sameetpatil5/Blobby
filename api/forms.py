@@ -7,10 +7,9 @@ from wtforms import (
     SubmitField,
     PasswordField,
     TextAreaField,
-    URLField,
-    Length
+    URLField
 )
-from wtforms.validators import DataRequired, URL, Email
+from wtforms.validators import DataRequired, URL, Email, Length
 from flask_ckeditor import CKEditorField
 
 
