@@ -1,6 +1,6 @@
 {
     "version": 2,
-    "builds":[
+    "builds": [
         {
             "src": "run.py",
             "use": "@vercel/python"
@@ -10,6 +10,11 @@
         {
             "src": "/(.*)",
             "dest": "run.py"
+        },
+        {
+            "src": "/(.*)",
+            "headers": {"Access-Control-Allow-Origin": "*"},
+            "continue": true
         }
     ]
 }
