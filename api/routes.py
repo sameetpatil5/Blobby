@@ -2,9 +2,9 @@ from flask import Blueprint, render_template, redirect, url_for, flash, session,
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import date
-from app.models import User, BlogPost, Comment
-from app.forms import BlogPostForm, RegisterForm, LoginForm, CommentForm, ContactFrom
-from app import db
+from api.models import User, BlogPost, Comment
+from api.forms import BlogPostForm, RegisterForm, LoginForm, CommentForm, ContactFrom
+from api import db
 from flask import current_app
 from functools import wraps
 import smtplib

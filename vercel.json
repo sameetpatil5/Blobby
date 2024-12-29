@@ -9,12 +9,7 @@
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "run.py"
-        },
-        {
-            "src": "/(.*)",
-            "headers": {"Access-Control-Allow-Origin": "*"},
-            "continue": true
+            "dest": "/run.py"
         }
     ]
 }
