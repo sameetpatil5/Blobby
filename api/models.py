@@ -6,9 +6,9 @@ from sqlalchemy import Integer, String, Text
 class User(UserMixin, db.Model):
     __tablename__ = "users"
     id = db.Column(Integer, primary_key=True)
-    username = db.Column(String(100))
-    email = db.Column(String(100), unique=True)
-    password = db.Column(String(100))
+    username = db.Column(String(255))
+    email = db.Column(String(255), unique=True)
+    password = db.Column(String(255), nullable=False)
     posts = relationship("BlogPost", back_populates="author")
     comments = relationship("Comment", back_populates="comment_author")
 
@@ -17,11 +17,11 @@ class BlogPost(db.Model):
     id = db.Column(Integer, primary_key=True)
     author_id = db.Column(Integer, db.ForeignKey("users.id"))
     author = relationship("User", back_populates="posts")
-    title = db.Column(String(250), unique=True, nullable=False)
-    subtitle = db.Column(String(250), nullable=False)
-    date = db.Column(String(250), nullable=False)
+    title = db.Column(String(255), unique=True, nullable=False)
+    subtitle = db.Column(String(255), nullable=False)
+    date = db.Column(String(255), nullable=False)
     body = db.Column(Text, nullable=False)
-    img_url = db.Column(String(250), nullable=False)
+    img_url = db.Column(String(255), nullable=False)
     comments = relationship("Comment", back_populates="parent_post")
 
 class Comment(db.Model):

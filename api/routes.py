@@ -55,18 +55,28 @@ def register():
     register_form = RegisterForm()
     if register_form.validate_on_submit():
         if User.query.filter_by(email=register_form.email.data).first():
-            flash("This user already exists. Please login instead.")
+            flash("This user already exists. Please login instead.", "warning")
             return redirect(url_for("routes.login"))
         new_user = User(
             username=register_form.username.data,
             email=register_form.email.data,
             password=generate_password_hash(register_form.password.data),
         )
-        db.session.add(new_user)
-        db.session.commit()
-        login_user(new_user)
-        session["logged_in"] = True
-        return redirect(url_for("routes.get_all_posts"))
+        # db.session.add(new_user)
+        # db.session.commit()
+        # login_user(new_user)
+        # session["logged_in"] = True
+        # return redirect(url_for("routes.get_all_posts"))
+        try:
+            db.session.add(new_user)
+            db.session.commit()
+            login_user(new_user)
+            session["logged_in"] = True
+            flash("Registration successful!", "success")
+            return redirect(url_for("routes.get_all_posts"))
+        except Exception as e:
+            db.session.rollback()
+            flash(f"An error occurred: {str(e)}", "danger")
     return render_template("register.html", form=register_form)
 
 # User login
