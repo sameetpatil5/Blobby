@@ -7,6 +7,7 @@ from flask_bootstrap import Bootstrap5
 from config import Config
 from hashlib import sha256
 from urllib.parse import urlencode
+import logging
 
 # Initialize extensions
 db = SQLAlchemy()
@@ -22,7 +23,7 @@ def gravatar_url(email, size=100, rating='g', default='retro', force_default=Fal
 
 @login_manager.user_loader
 def load_user(user_id):
-    from api.models import User
+    from app.models import User
     return User.query.get(int(user_id))
 
 def create_app():
@@ -40,8 +41,17 @@ def create_app():
     login_manager.login_view = "routes.login"
     # ckeditor.config(default:{"versionCheck"=False})
 
+    # Setup console logging
+    if not app.debug:
+        stream_handler = logging.StreamHandler()
+        stream_handler.setLevel(logging.INFO)
+        app.logger.addHandler(stream_handler)
+
+    app.logger.setLevel(logging.INFO)
+    app.logger.info('App startup')
+
     # Register routes blueprints
-    from api.routes import routes_bp
+    from app.routes import routes_bp
     app.register_blueprint(routes_bp)
 
     # Create database tables

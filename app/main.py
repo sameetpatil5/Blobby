@@ -27,7 +27,7 @@ from sqlalchemy.orm import relationship, DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import Integer, String, Text
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
-from api.forms import BlogPostForm, RegisterForm, LoginForm, CommentForm, ContactFrom
+from app.forms import BlogPostForm, RegisterForm, LoginForm, CommentForm, ContactFrom
 import smtplib
 
 # Load environment variables
