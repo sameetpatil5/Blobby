@@ -5,13 +5,27 @@ from datetime import date
 from app.models import User, BlogPost, Comment
 from app.forms import BlogPostForm, RegisterForm, LoginForm, CommentForm, ContactFrom
 from app import db
+from flask import current_app
 from functools import wraps
 import smtplib
 import os
+import bleach
+import re
 
 # Load email credentials from environment variables
 MAIL_ADDRESS = os.environ.get("EMAIL")
 MAIL_APP_PW = os.environ.get("PASSWORD")
+
+# Sanitize content from User input
+def sanitize(text):
+    allowed_tags = current_app.config['ALLOWED_TAGS']
+    allowed_attributes = current_app.config['ALLOWED_ATTRIBUTES']
+    return bleach.clean(
+        text,
+        tags=allowed_tags,
+        attributes=allowed_attributes,
+        strip=True
+    )
 
 # Create a Blueprint for routes
 routes_bp = Blueprint("routes", __name__)
@@ -90,12 +104,19 @@ def show_post(post_id):
     form = CommentForm()
     if form.validate_on_submit() and current_user.is_authenticated:
         comment = Comment(
-            text=form.comment_text.data, comment_author=current_user, parent_post=post
+            # text=form.comment_text.data, comment_author=current_user, parent_post=post
+            text=sanitize(form.comment_text.data), comment_author=current_user, parent_post=post
         )
         db.session.add(comment)
         db.session.commit()
         return redirect(url_for("routes.show_post", post_id=post.id))
-    return render_template("post.html", post=post, form=form)
+
+    sanitized_post_body = sanitize(post.body)
+    sanitized_comments_text = [sanitize(comment.text) for comment in post.comments]
+    # print(sanitized_comments_text)
+    # print([comments.text for comments in post.comments])
+    comments_with_sanitized_text = zip(post.comments, sanitized_comments_text)
+    return render_template("post.html", post=post, form=form, sanitized_post_body=sanitized_post_body, comments_with_sanitized_text=comments_with_sanitized_text)
 
 # Add a new post (admin only)
 @routes_bp.route("/new-post", methods=["GET", "POST"])
@@ -106,7 +127,7 @@ def add_new_post():
         new_post = BlogPost(
             title=form.title.data,
             subtitle=form.subtitle.data,
-            body=form.body.data,
+            body=sanitize(form.body.data),
             img_url=form.img_url.data,
             author=current_user,
             date=date.today().strftime("%B %d, %Y"),
@@ -125,7 +146,7 @@ def edit_post(post_id):
     if form.validate_on_submit():
         post.title = form.title.data
         post.subtitle = form.subtitle.data
-        post.body = form.body.data
+        post.body = sanitize(form.body.data)
         post.img_url = form.img_url.data
         db.session.commit()
         return redirect(url_for("routes.show_post", post_id=post.id))

@@ -24,7 +24,8 @@
   <div class="container px-4 px-lg-5">
     <div class="row gx-4 gx-lg-5 justify-content-center">
       <div class="col-md-10 col-lg-8 col-xl-7">
-        {{ post.body | safe }}
+        <!-- {{ post.body | safe }} -->
+        {{ sanitized_post_body | safe }}
         {% if is_admin %}
         <div class="d-flex justify-content-end mb-4">
           <a class="btn btn-primary float-right" href="{{url_for('routes.edit_post', post_id=post.id)}}">Edit Post</a>
@@ -35,23 +36,27 @@
         {{ render_form(form, novalidate=True, button_map={"submit": "primary"}) }}
         <div class="comment">
           <ul class="commentList">
-            {% for comment in post.comments: %}
+            <!-- {% for comment in post.comments: %} -->
+            {% for comment, sanitized_comments_text in comments_with_sanitized_text %}
             <li>
               <div class="commenterImage">
                 <img src="{{ comment.comment_author.email | gravatar }}" />
               </div>
               <div class="commentText">
-                <p>{{ comment.text | safe }}</p>
+                <!-- <p>{{ comment.text | safe }}</p> -->
+                <p>{{ sanitized_comments_text | safe }}</p>
                 <span class="sub-text">{{ comment.comment_author.username }}</span>
               </div>
             </li>
-            {% endfor %}
+            {% endfor %} 
+            <!-- {% endfor %} -->
           </ul>
-
         </div>
+
       </div>
     </div>
   </div>
 </article>
 
-{% include "footer.html" %} {% endblock %}
+{% include "footer.html" %} 
+{% endblock %}
