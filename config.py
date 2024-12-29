@@ -1,14 +1,14 @@
 import os
 
 class Config:
-    SECRET_KEY = os.getenv("SECRET_KEY")
-    SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI")
+    SECRET_KEY = os.environ.get("SECRET_KEY")
+    SQLALCHEMY_DATABASE_URI = os.environ.get("SQLALCHEMY_DATABASE_URI")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     MAIL_SERVER = "smtp.gmail.com"
     MAIL_PORT = 587
     MAIL_USE_TLS = True
-    MAIL_USERNAME = os.getenv("EMAIL")
-    MAIL_PASSWORD = os.getenv("PASSWORD")
+    MAIL_USERNAME = os.environ.get("EMAIL")
+    MAIL_PASSWORD = os.environ.get("PASSWORD")
 
     # CKEDITOR_CONFIG = {
     #     'versionCheck': False,
