@@ -30,15 +30,6 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
 
-    # Setup console logging
-    if not app.debug:
-        stream_handler = logging.StreamHandler()
-        stream_handler.setLevel(logging.INFO)
-        app.logger.addHandler(stream_handler)
-
-    app.logger.setLevel(logging.INFO)
-    # app.logger.info('Flask App startup')
-
     # Initialize extensions with app
     db.init_app(app)
     migrate.init_app(app, db)
