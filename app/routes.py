@@ -7,8 +7,8 @@ from app.forms import BlogPostForm, RegisterForm, LoginForm, CommentForm, Contac
 from app import db
 from flask import current_app
 from functools import wraps
-import smtplib
 import bleach
+import resend
 
 # Sanitize content from User input
 def sanitize(text):
@@ -56,11 +56,6 @@ def register():
             email=register_form.email.data,
             password=generate_password_hash(register_form.password.data),
         )
-        # db.session.add(new_user)
-        # db.session.commit()
-        # login_user(new_user)
-        # session["logged_in"] = True
-        # return redirect(url_for("routes.get_all_posts"))
         try:
             db.session.add(new_user)
             db.session.commit()
@@ -108,7 +103,6 @@ def show_post(post_id):
     form = CommentForm()
     if form.validate_on_submit() and current_user.is_authenticated:
         comment = Comment(
-            # text=form.comment_text.data, comment_author=current_user, parent_post=post
             text=sanitize(form.comment_text.data), comment_author=current_user, parent_post=post
         )
         db.session.add(comment)
@@ -117,8 +111,6 @@ def show_post(post_id):
 
     sanitized_post_body = sanitize(post.body)
     sanitized_comments_text = [sanitize(comment.text) for comment in post.comments]
-    # print(sanitized_comments_text)
-    # print([comments.text for comments in post.comments])
     comments_with_sanitized_text = zip(post.comments, sanitized_comments_text)
     return render_template("post.html", post=post, form=form, sanitized_post_body=sanitized_post_body, comments_with_sanitized_text=comments_with_sanitized_text)
 
@@ -173,29 +165,25 @@ def about():
 # Contact page
 @routes_bp.route("/contact", methods=["GET", "POST"])
 def contact():
-    # Load the EMAIL and PASSWORD from app
-    MAIL_ADDRESS = current_app.config["MAIL_ADDRESS"]
-    MAIL_PASSWORD = current_app.config["MAIL_PASSWORD"]
+    # Load the RESEND API KEY from app
+    resend.api_key = current_app.config["RESEND_API_KEY"]
+    resend_sender = current_app.config["RESEND_SENDER"]
+    resend_receiver = current_app.config["RESEND_RECEIVER"]
 
     if request.method == "POST":
-        MESSAGE = f"Subject: {request.form['name']} has sent a messsage!!!\n\n \
-                    Name: {request.form['name']}\n \
-                    E-mail: {request.form['email']}\n \
-                    Message: {request.form['message']}"
-        with smtplib.SMTP("smtp.gmail.com", 587) as connection:
-            connection.starttls()
-            connection.login(user=MAIL_ADDRESS, password=MAIL_PASSWORD)
-            connection.sendmail(
-                from_addr=MAIL_ADDRESS, to_addrs=MAIL_ADDRESS, msg=MESSAGE
-            )
-            connection.close()
+        params: resend.Emails.SendParams = {
+            "from": f"Blobby <{resend_sender}>",
+            "to": resend_receiver,
+            "subject": f"{request.form['name']} has sent a messsage!!!",
+            "html": f"Name: {request.form['name']}<br />E-mail: {request.form['email']}<br />Message: {request.form['message']}",
+        }
+        resend.Emails.send(params)
         return render_template("contact.html", msg_sent=True)
     else:
         if current_user.is_authenticated:
-            name = current_user.username
+            name = current_user.username    
             email = current_user.email
         else:
             name = ""
             email = ""
-        return render_template("contact.html", msg_sent=False, name=name, email=email, current_user=current_user,
-        )
+        return render_template("contact.html", msg_sent=False, name=name, email=email, current_user=current_user)
