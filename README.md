@@ -14,9 +14,9 @@ Welcome to **Blobby** – a beautifully crafted blogging platform where your **m
 
 ---
 
-## 🛠️ Getting Started
+## 🛠️ Contribute to Blobby
 
-Follow these steps to set up and run Blobby on your local machine:
+Follow these steps to set up and run Blobby on your local machine to add new features:
 
 ### 1️⃣ Clone the Repository
 
@@ -36,10 +36,13 @@ pip install -r requirements.txt
 Create a `.env` file in the root directory and add the following:
 
 ```plaintext
-EMAIL=your-email@example.com
-PASSWORD=your-email-password
 SECRET_KEY=your-secret-key
 SQLALCHEMY_DATABASE_URI=your-database-uri
+EMAIL=your-email
+PASSWORD=your-email-password
+RESEND_API_KEY=your-resend-api-key
+RESEND_RECEIVER=your-resend-email
+RESEND_SENDER=your-resend-email-domain
 ```
 
 ### 4️⃣ Run the Application
@@ -92,7 +95,7 @@ Blobby is built with the following awesome technologies:
 - **Backend**: [Flask](https://flask.palletsprojects.com/) 🐍  
 - **Frontend**: [Bootstrap](https://getbootstrap.com/) 🎨  
 - **Rich Text Editor**: [CKEditor](https://ckeditor.com/) 🖋️  
-- **Database**: [PostgreSQL](https://www.postgresql.org/) (hosted on [Vercel](https://vercel.com/)) 🗃️  
+- **Database**: [Neon](https://neon.tech/) 🌌
 - **Deployment**: [Vercel](https://vercel.com/) 🚀  
 
 ---
@@ -114,7 +117,7 @@ Let's get social! Connect with me on:
 
 ---
 
-✨ **Blobby**: Your blog, your story, your world. 🌍💖
+✨ **Blobby**: your MIND. your EXPRESSION. your LIFE. 🧠😊💖
 
 ---
 
