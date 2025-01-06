@@ -62,7 +62,7 @@ def register():
             login_user(new_user)
             session["logged_in"] = True
             flash("Registration successful!", "success")
-            return redirect(url_for("routes.get_all_posts"))
+            return redirect(url_for("routes.get_posts"))
         except Exception as e:
             db.session.rollback()
             flash(f"An error occurred: {str(e)}", "danger")
@@ -78,7 +78,7 @@ def login():
             login_user(user)
             session["is_admin"] = user.id == 1
             session["logged_in"] = True
-            return redirect(url_for("routes.get_all_posts"))
+            return redirect(url_for("routes.get_posts"))
         flash("Invalid email or password.")
     return render_template("login.html", form=login_form)
 
@@ -88,13 +88,19 @@ def login():
 def logout():
     logout_user()
     session.clear()
-    return redirect(url_for("routes.get_all_posts"))
+    return redirect(url_for("routes.get_posts"))
 
-# Display all posts
+# Display Newest 10 posts
 @routes_bp.route("/")
-def get_all_posts():
+def get_posts():
+    posts = BlogPost.query.limit(10).all()
+    return render_template("index.html", posts=posts)
+
+
+@routes_bp.route("/all_posts")
+def show_all_posts():
     posts = BlogPost.query.all()
-    return render_template("index.html", all_posts=posts)
+    return render_template("all_posts.html", all_posts=posts)
 
 # Show individual post
 @routes_bp.route("/post/<int:post_id>", methods=["GET", "POST"])
@@ -130,7 +136,7 @@ def add_new_post():
         )
         db.session.add(new_post)
         db.session.commit()
-        return redirect(url_for("routes.get_all_posts"))
+        return redirect(url_for("routes.get_posts"))
     return render_template("make-post.html", form=form)
 
 # Edit a post (admin only)
@@ -155,7 +161,7 @@ def delete_post(post_id):
     post = BlogPost.query.get_or_404(post_id)
     db.session.delete(post)
     db.session.commit()
-    return redirect(url_for("routes.get_all_posts"))
+    return redirect(url_for("routes.get_posts"))
 
 # About page
 @routes_bp.route("/about")

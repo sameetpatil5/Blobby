@@ -1,0 +1,42 @@
+{% include "header.html" %}
+
+<!-- Page Header-->
+<div>
+    <header>
+        <h1>Blobs</h1>
+    </header>
+</div>
+
+<!-- Main Content-->
+<div class="container px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+        <div class="col-md-10 col-lg-8 col-xl-7">
+            <!-- Post preview-->
+            {% for post in all_posts %}
+            <div class="post-preview">
+                <a href="{{ url_for('routes.show_post', post_id=post.id) }}">
+                    <h2 class="post-title">{{ post.title }}</h2>
+                    <h3 class="post-subtitle">{{ post.subtitle }}</h3>
+                </a>
+                <p class="post-meta">
+                    Posted by
+                    <!-- post.author.name is now a User object -->
+                    <a href="#">{{ post.author.username }}</a>
+                    on {{post.date}}
+                    <!-- Only show delete button if user id is 1 (admin user) -->
+                    {% if is_admin: %}
+                    <a href="{{url_for('routes.delete_post', post_id=post.id) }}">✘</a>
+                    {% endif %}
+                </p>
+            </div>
+            <!-- Divider-->
+            <hr class="my-4" />
+            {% endfor %}
+
+            <!-- Pager-->
+            <div class="d-flex justify-content-end mb-4">
+                <a class="btn btn-secondary text-uppercase" href="{{url_for('routes.get_posts')}}">Home</a>
+            </div>
+        </div>
+    </div>
+</div>
