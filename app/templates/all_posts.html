@@ -20,13 +20,8 @@
                 </a>
                 <p class="post-meta">
                     Posted by
-                    <!-- post.author.name is now a User object -->
                     <a href="#">{{ post.author.username }}</a>
                     on {{post.date}}
-                    <!-- Only show delete button if user id is 1 (admin user) -->
-                    {% if is_admin: %}
-                    <a href="{{url_for('routes.delete_post', post_id=post.id) }}">✘</a>
-                    {% endif %}
                 </p>
             </div>
             <!-- Divider-->

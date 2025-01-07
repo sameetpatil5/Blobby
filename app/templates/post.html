@@ -26,7 +26,7 @@
       <div class="col-md-10 col-lg-8 col-xl-7">
         <!-- {{ post.body | safe }} -->
         {{ sanitized_post_body | safe }}
-        {% if is_admin %}
+        {% if current_user.is_authenticated and post.author == current_user %}
         <div class="d-flex justify-content-end mb-4">
           <a class="btn btn-primary float-right" href="{{url_for('routes.edit_post', post_id=post.id)}}">Edit Post</a>
         </div>

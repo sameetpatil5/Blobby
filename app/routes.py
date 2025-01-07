@@ -34,6 +34,16 @@ def admin_only(func):
             return abort(403)
     return wrapper
 
+def author_only(func):
+    @wraps(func)
+    def wrapper(post_id, *args, **kwargs):
+        post = BlogPost.query.get_or_404(post_id)
+        if post.author == current_user:
+            return func(post_id, *args, **kwargs)
+        else:
+            return abort(403)  # Forbidden
+    return wrapper
+
 # Context processor for template rendering
 @routes_bp.app_context_processor
 def context_processor():
@@ -96,7 +106,7 @@ def get_posts():
     posts = BlogPost.query.limit(10).all()
     return render_template("index.html", posts=posts)
 
-
+# Display all posts
 @routes_bp.route("/all_posts")
 def show_all_posts():
     posts = BlogPost.query.all()
@@ -120,9 +130,10 @@ def show_post(post_id):
     comments_with_sanitized_text = zip(post.comments, sanitized_comments_text)
     return render_template("post.html", post=post, form=form, sanitized_post_body=sanitized_post_body, comments_with_sanitized_text=comments_with_sanitized_text)
 
-# Add a new post (admin only)
+
+# Add a new post
 @routes_bp.route("/new-post", methods=["GET", "POST"])
-@admin_only
+@login_required
 def add_new_post():
     form = BlogPostForm()
     if form.validate_on_submit():
@@ -139,9 +150,11 @@ def add_new_post():
         return redirect(url_for("routes.get_posts"))
     return render_template("make-post.html", form=form)
 
-# Edit a post (admin only)
+
+# Edit a post
 @routes_bp.route("/edit-post/<int:post_id>", methods=["GET", "POST"])
-@admin_only
+@login_required
+@author_only
 def edit_post(post_id):
     post = BlogPost.query.get_or_404(post_id)
     form = BlogPostForm(obj=post)
@@ -154,9 +167,10 @@ def edit_post(post_id):
         return redirect(url_for("routes.show_post", post_id=post.id))
     return render_template("make-post.html", form=form, is_edit=True)
 
-# Delete a post (admin only)
+# Delete a post
 @routes_bp.route("/delete/<int:post_id>")
-@admin_only
+@login_required
+@author_only
 def delete_post(post_id):
     post = BlogPost.query.get_or_404(post_id)
     db.session.delete(post)
