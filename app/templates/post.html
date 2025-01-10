@@ -10,7 +10,7 @@
           <h1>{{ post.title }}</h1>
           <h2 class="subheading">{{ post.subtitle }}</h2>
           <span class="meta">Posted by
-            <a href="#">{{ post.author.username }}</a>
+            <a href="{{url_for('routes.account', user_id=post.author.id)}}">{{ post.author.username }}</a>
             on {{ post.date }}
           </span>
         </div>
@@ -27,8 +27,11 @@
         <!-- {{ post.body | safe }} -->
         {{ sanitized_post_body | safe }}
         {% if current_user.is_authenticated and post.author == current_user %}
-        <div class="d-flex justify-content-end mb-4">
-          <a class="btn btn-primary float-right" href="{{url_for('routes.edit_post', post_id=post.id)}}">Edit Post</a>
+        <div class="d-flex justify-content-between mb-4">
+          <!-- Edit Post -->
+          <a class="btn btn-primary" href="{{ url_for('routes.edit_post', post_id=post.id) }}">Edit Post</a>
+          <!-- Delete Post -->
+          <a class="btn btn-danger" href="{{ url_for('routes.delete_post', post_id=post.id) }}">Delete Post</a>
         </div>
         {% endif %}
 
@@ -48,7 +51,7 @@
                 <span class="sub-text">{{ comment.comment_author.username }}</span>
               </div>
             </li>
-            {% endfor %} 
+            {% endfor %}
             <!-- {% endfor %} -->
           </ul>
         </div>
@@ -58,5 +61,5 @@
   </div>
 </article>
 
-{% include "footer.html" %} 
+{% include "footer.html" %}
 {% endblock %}

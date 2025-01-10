@@ -246,19 +246,26 @@ def contact():
 
 
 # Account page
-@routes_bp.route("/account")
-@login_required
-def account():
+@routes_bp.route("/account/<int:user_id>")
+def account(user_id):
     # Get the current user's posts sorted in descending order of date
-    posts = BlogPost.query.filter_by(author=current_user).all()
-
+    user = User.query.get(user_id)
+    if not user:
+        abort(404)
+    posts = BlogPost.query.filter_by(author=user).all()
 
     # Render the account page with user information and their posts
     return render_template(
         "account.html",
-        user=current_user,
+        user=user,
         posts=posts,
     )
+
+
+@routes_bp.route("/my-account")
+@login_required
+def my_account():
+    return redirect(url_for("routes.account", user_id=current_user.id))
 
 
 @routes_bp.route("/edit-account", methods=["GET", "POST"])
