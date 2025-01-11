@@ -26,13 +26,8 @@
         </a>
         <p class="post-meta">
           Posted by
-          <a href="#">{{ post.author.username }}</a>
-          on {{post.date}}
-
-          <!-- Delete Post -->
-          {% if current_user.is_authenticated and post.author == current_user %}
-          <a href="{{url_for('routes.delete_post', post_id=post.id) }}">✘</a>
-          {% endif %}
+          <a href="{{ url_for('routes.account', user_id=post.author.id) }}"><u>{{ post.author.username }}</u></a>
+          on {{ post.date.strftime('%d-%m-%Y') }}
         </p>
       </div>
       <!-- Divider-->

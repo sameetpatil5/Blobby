@@ -27,3 +27,18 @@ window.addEventListener('DOMContentLoaded', () => {
         scrollPos = currentTop;
     });
 })
+
+function updateNavbarLogo() {
+    const logo = document.getElementById('navbar-logo');
+    const isLargeScreen = window.matchMedia("(min-width: 992px)").matches;
+
+    if (isLargeScreen) {
+        logo.src = "/static/assets/img/blobby-light.png"; // Replace with actual path
+    } else {
+        logo.src = "/static/assets/img/blobby-dark.png"; // Replace with actual path
+    }
+}
+
+// Run on page load and on resize
+window.addEventListener('load', updateNavbarLogo);
+window.addEventListener('resize', updateNavbarLogo);
