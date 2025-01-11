@@ -10,7 +10,6 @@ from flask import (
 )
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import date
 from app.models import User, BlogPost, Comment
 from app.forms import BlogPostForm, RegisterForm, LoginForm, CommentForm, ContactFrom
 from app import db
@@ -170,7 +169,6 @@ def add_new_post():
             body=sanitize(form.body.data),
             img_url=form.img_url.data,
             author=current_user,
-            date=date.today().strftime("%B %d, %Y"),
         )
         db.session.add(new_post)
         db.session.commit()
@@ -294,4 +292,4 @@ def edit_account():
             db.session.rollback()
             flash(f"An error occurred: {str(e)}", "danger")
 
-    return render_template("edit_account.html", user=current_user)
+    return render_template("edit-account.html", user=current_user)

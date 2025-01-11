@@ -26,8 +26,8 @@
         </a>
         <p class="post-meta">
           Posted by
-          <a href="{{ url_for('routes.account', user_id=post.author.id) }}">{{ post.author.username }}</a>
-          on {{post.date}}
+          <a href="{{ url_for('routes.account', user_id=post.author.id) }}"><u>{{ post.author.username }}</u></a>
+          on {{ post.date.strftime('%d-%m-%Y') }}
         </p>
       </div>
       <!-- Divider-->

@@ -1,11 +1,21 @@
 {% include "header.html" %}
 
 <!-- Page Header-->
-<div>
-    <header>
-        <h1>Blobs</h1>
-    </header>
-</div>
+{% block content %}
+<!-- Page Header-->
+<header class="masthead" style="background-image: url('../static/assets/img/home-bg.jpg')">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="site-heading">
+                    <h1>Blobs</h1>
+                    <span class="subheading">your MIND. your EXPRESSION. your LIFE.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
 
 <!-- Main Content-->
 <div class="container px-4 px-lg-5">
@@ -20,8 +30,9 @@
                 </a>
                 <p class="post-meta">
                     Posted by
-                    <a href="#">{{ post.author.username }}</a>
-                    on {{post.date}}
+                    <a href="{{ url_for('routes.account', user_id=post.author.id) }}"><u>{{ post.author.username
+                            }}</u></a>
+                    on {{post.date.strftime('%d-%m-%Y')}}
                 </p>
             </div>
             <!-- Divider-->
@@ -35,3 +46,5 @@
         </div>
     </div>
 </div>
+{% endblock %}
+{% include "footer.html" %}

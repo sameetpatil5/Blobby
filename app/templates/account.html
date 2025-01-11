@@ -62,7 +62,7 @@
                     <h3 class="post-subtitle">{{ post.subtitle }}</h3>
                 </a>
                 <p class="post-meta">
-                    Posted by {{ post.author.username }} on {{ post.date }}
+                    Posted by <u>{{ post.author.username }}</u> on {{ post.date.strftime('%d-%m-%Y') }}
                     <!-- Delete Post -->
                     {% if current_user.is_authenticated and post.author == current_user %}
                     <a href="{{ url_for('routes.delete_post', post_id=post.id) }}" class="text-danger ms-2">✘</a>
